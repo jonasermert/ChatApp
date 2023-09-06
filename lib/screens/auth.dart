@@ -10,6 +10,8 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  var _isLogin = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,37 +34,47 @@ class _AuthScreenState extends State<AuthScreen> {
               Card(
                 margin: const EdgeInsets.all(20),
                 child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Form(
+                    child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Form(
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Email'
-                            ),
-                              keyboardType: TextInputType.emailAddress,
-                              autocorrect: false,
-                              textCapitalization: TextCapitalization.none,
-                            ),
-                            TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Password'
-                            ),
-                            obscureText: true,
-                            ),
-                        ],
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextFormField(
+                        decoration: const InputDecoration(labelText: 'Email'),
+                        keyboardType: TextInputType.emailAddress,
+                        autocorrect: false,
+                        textCapitalization: TextCapitalization.none,
+                      ),
+                      TextFormField(
+                        decoration:
+                            const InputDecoration(labelText: 'Password'),
+                        obscureText: true,
+                      ),
+                      const SizedBox(height: 12),
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context)
+                          .colorScheme
+                          .primaryContainer,
+                        )
+                        child: Text(_isLogin ? 'Login' : 'SignUp'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          _isLogin = !_isLogin;
+                        },
+                        child: Text(_isLogin ? 'Create Account' : 'Login'),
                       )
-                    ),
-                  
-                  )
-                ),
+                    ],
+                  )),
+                )),
               ),
             ],
           ),
         ),
       ),
-    )
+    );
   }
 }
