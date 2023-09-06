@@ -10,16 +10,17 @@
 .svn/
 migrate_working_dir/
 
+#Firebase
+lib/firebase_options.dart
+
 # IntelliJ related
 *.iml
 *.ipr
 *.iws
 .idea/
 
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
+# VS Code 
+.vscode/
 
 # Flutter/Dart/Pub related
 **/doc/api/
@@ -31,6 +32,34 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+
+# Flutter build artifacts
+**/ios/Flutter/.last_build_id
+**/web/packages/flutter_tool/flutter_build/.last_build_id
+
+# iOS build
+ios/Pods/
+ios/build/
+ios/Flutter/App.framework/
+
+# macOS build
+macos/DerivedData/
+
+# Web build
+web/build/
+web/flutter_service_worker.js
+web/flutter_assets/
+
+# Linux build
+linux/flutter/ephemeral/GeneratedPluginRegistrant.h
+linux/flutter/flutter_generated_plugin_registrant.cc
+
+# Windows build
+windows/flutter/flutter_export.h
+windows/flutter/flutter_export.cc
+windows/flutter/flutter_plugins_registrant.h
+windows/flutter/flutter_plugins_registrant.cc
+
 
 # Symbolication related
 app.*.symbols
