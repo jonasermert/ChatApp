@@ -71,3 +71,11 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# C++-bezogene Dateien
+*.cpp
+*.h
+
+# Build-bezogene Ordner
+build/
+bin/
