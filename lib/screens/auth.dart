@@ -1,9 +1,11 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
+import '../ui/app_theme.dart';
 import '../widgets/user_image_picker.dart';
 
 final _firebase = FirebaseAuth.instance;
@@ -82,28 +84,39 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = context.kitColors;
+    final spacing = context.spacing;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: isDark ? colors.neutral950 : colors.neutral900,
       body: Center(
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                margin: const EdgeInsets.only(
-                  top: 30,
-                  bottom: 20,
-                  left: 20,
-                  right: 20,
+                margin: EdgeInsets.only(
+                  top: spacing.lg,
+                  bottom: spacing.md,
+                  left: spacing.md,
+                  right: spacing.md,
                 ),
                 width: 200,
-                child: Image.asset('assets/images/chat.png'),
+                child: Image.asset(
+                  'assets/images/chat.png',
+                  color: colors.neutral50,
+                ),
               ),
               Card(
-                margin: const EdgeInsets.all(20),
+                margin: EdgeInsets.all(spacing.md),
+                color: isDark ? colors.neutral900 : colors.neutral800,
+                shape: RoundedRectangleBorder(
+                  borderRadius: context.borderRadius.xxxl,
+                ),
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(spacing.md),
                     child: Form(
                       key: _form,
                       child: Column(
@@ -116,8 +129,19 @@ class _AuthScreenState extends State<AuthScreen> {
                               },
                             ),
                           TextFormField(
-                            decoration: const InputDecoration(
-                                labelText: 'Email Address'),
+                            decoration: InputDecoration(
+                              labelText: 'Email Address',
+                              labelStyle: TextStyle(color: colors.neutral400),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: colors.neutral700),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: colors.neutral300),
+                              ),
+                            ),
+                            style: TextStyle(color: colors.neutral50),
                             keyboardType: TextInputType.emailAddress,
                             autocorrect: false,
                             textCapitalization: TextCapitalization.none,
@@ -127,7 +151,6 @@ class _AuthScreenState extends State<AuthScreen> {
                                   !value.contains('@')) {
                                 return 'Please enter a valid email address.';
                               }
-
                               return null;
                             },
                             onSaved: (value) {
@@ -136,8 +159,19 @@ class _AuthScreenState extends State<AuthScreen> {
                           ),
                           if (!_isLogin)
                             TextFormField(
-                              decoration:
-                                  const InputDecoration(labelText: 'Username'),
+                              decoration: InputDecoration(
+                                labelText: 'Username',
+                                labelStyle: TextStyle(color: colors.neutral400),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: colors.neutral700),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: colors.neutral300),
+                                ),
+                              ),
+                              style: TextStyle(color: colors.neutral50),
                               enableSuggestions: false,
                               validator: (value) {
                                 if (value == null ||
@@ -152,8 +186,19 @@ class _AuthScreenState extends State<AuthScreen> {
                               },
                             ),
                           TextFormField(
-                            decoration:
-                                const InputDecoration(labelText: 'Password'),
+                            decoration: InputDecoration(
+                              labelText: 'Password',
+                              labelStyle: TextStyle(color: colors.neutral400),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: colors.neutral700),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: colors.neutral300),
+                              ),
+                            ),
+                            style: TextStyle(color: colors.neutral50),
                             obscureText: true,
                             validator: (value) {
                               if (value == null || value.trim().length < 6) {
@@ -165,18 +210,31 @@ class _AuthScreenState extends State<AuthScreen> {
                               _enteredPassword = value!;
                             },
                           ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: spacing.md),
                           if (_isAuthenticating)
-                            const CircularProgressIndicator(),
+                            CircularProgressIndicator(
+                              color: colors.neutral50,
+                            ),
                           if (!_isAuthenticating)
-                            ElevatedButton(
-                              onPressed: _submit,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Theme.of(context)
-                                    .colorScheme
-                                    .primaryContainer,
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                onPressed: _submit,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: colors.neutral50,
+                                  foregroundColor: colors.neutral950,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: context.borderRadius.xxl,
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: spacing.sm,
+                                  ),
+                                ),
+                                child: Text(
+                                  _isLogin ? 'Login' : 'Sign up',
+                                  style: context.textStyles.lg,
+                                ),
                               ),
-                              child: Text(_isLogin ? 'Login' : 'Signup'),
                             ),
                           if (!_isAuthenticating)
                             TextButton(
@@ -185,6 +243,9 @@ class _AuthScreenState extends State<AuthScreen> {
                                   _isLogin = !_isLogin;
                                 });
                               },
+                              style: TextButton.styleFrom(
+                                foregroundColor: colors.neutral400,
+                              ),
                               child: Text(_isLogin
                                   ? 'Create an account'
                                   : 'I already have an account'),

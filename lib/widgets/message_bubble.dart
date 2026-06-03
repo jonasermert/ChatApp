@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../ui/app_theme.dart';
+
 class MessageBubble extends StatelessWidget {
   const MessageBubble.first({
     super.key,
@@ -26,7 +28,13 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final colors = context.kitColors;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final bubbleColorMe = isDark ? colors.neutral700 : colors.neutral200;
+    final bubbleColorOther = isDark ? colors.neutral800 : colors.neutral300;
+    final textColorMe = isDark ? colors.neutral50 : colors.neutral950;
+    final textColorOther = isDark ? colors.neutral50 : colors.neutral950;
 
     return Stack(
       children: [
@@ -35,10 +43,8 @@ class MessageBubble extends StatelessWidget {
             top: 15,
             right: isMe ? 0 : null,
             child: CircleAvatar(
-              backgroundImage: NetworkImage(
-                userImage!,
-              ),
-              backgroundColor: theme.colorScheme.primary.withAlpha(180),
+              backgroundImage: NetworkImage(userImage!),
+              backgroundColor: colors.neutral600,
               radius: 23,
             ),
           ),
@@ -55,32 +61,28 @@ class MessageBubble extends StatelessWidget {
                   if (isFirstInSequence) const SizedBox(height: 18),
                   if (username != null)
                     Padding(
-                      padding: const EdgeInsets.only(
-                        left: 13,
-                        right: 13,
-                      ),
+                      padding: const EdgeInsets.only(left: 13, right: 13),
                       child: Text(
                         username!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+                          color: isDark ? colors.neutral400 : colors.neutral600,
+                          fontSize: 12,
                         ),
                       ),
                     ),
                   Container(
                     decoration: BoxDecoration(
-                      color: isMe
-                          ? Colors.grey[300]
-                          : theme.colorScheme.secondary.withAlpha(200),
+                      color: isMe ? bubbleColorMe : bubbleColorOther,
                       borderRadius: BorderRadius.only(
                         topLeft: !isMe && isFirstInSequence
                             ? Radius.zero
-                            : const Radius.circular(12),
+                            : const Radius.circular(16),
                         topRight: isMe && isFirstInSequence
                             ? Radius.zero
-                            : const Radius.circular(12),
-                        bottomLeft: const Radius.circular(12),
-                        bottomRight: const Radius.circular(12),
+                            : const Radius.circular(16),
+                        bottomLeft: const Radius.circular(16),
+                        bottomRight: const Radius.circular(16),
                       ),
                     ),
                     constraints: const BoxConstraints(maxWidth: 200),
@@ -96,9 +98,7 @@ class MessageBubble extends StatelessWidget {
                       message,
                       style: TextStyle(
                         height: 1.3,
-                        color: isMe
-                            ? Colors.black87
-                            : theme.colorScheme.onSecondary,
+                        color: isMe ? textColorMe : textColorOther,
                       ),
                       softWrap: true,
                     ),

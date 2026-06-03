@@ -1,9 +1,11 @@
 import 'package:chatapp/screens/auth.dart';
 import 'package:chatapp/screens/chat.dart';
 import 'package:chatapp/screens/splash.dart';
+import 'package:chatapp/ui/app_theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
 import 'firebase_options.dart';
 
 void main() async {
@@ -22,16 +24,19 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'FlutterChat',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData().copyWith(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 63, 17, 177)),
-      ),
+      theme: AppTheme.buildTheme(Brightness.light),
+      darkTheme: AppTheme.buildTheme(Brightness.dark),
+      themeMode: ThemeMode.system,
       home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (ctx, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const SplashScreen();
+            }
+            if (snapshot.hasError) {
+              return const Scaffold(
+                body: Center(child: Text('Authentication error')),
+              );
             }
             if (snapshot.hasData) {
               return const ChatScreen();
